@@ -2,6 +2,7 @@ import './style.css';
 import ProjectService from './Services/ProjectServices';
 import UserService from './Services/UserService';
 import { Project } from './Models/Project';
+import CurrentProjectService from './Services/CurrentProjectService';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -13,15 +14,12 @@ const updateProjectList = () => {
   projects.forEach(project => {
     const listItem = document.createElement('li');
     listItem.textContent = `${project.name}: ${project.description}`;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.addEventListener('click', () => {
-      ProjectService.deleteProject(project.id);
-      updateProjectList();
+    listItem.className = 'project-item';
+    listItem.addEventListener('click', () => {
+      CurrentProjectService.setCurrentProject(project);
+      updateCurrentProject();
     });
 
-    listItem.appendChild(deleteButton);
     projectList.appendChild(listItem);
   });
 };
@@ -49,10 +47,17 @@ const updateUserDetails = () => {
   userDiv.textContent = `Logged in as: ${user.firstName} ${user.lastName}`;
 };
 
+const updateCurrentProject = () => {
+  const currentProject = CurrentProjectService.getCurrentProject();
+  const currentProjectDiv = document.getElementById('current-project') as HTMLDivElement;
+  currentProjectDiv.textContent = currentProject ? `Current Project: ${currentProject.name}` : 'No project selected';
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const addProjectButton = document.getElementById('add-project') as HTMLButtonElement;
   addProjectButton.addEventListener('click', addProject);
 
   updateProjectList();
+  updateCurrentProject();
   updateUserDetails();
 });
