@@ -1,15 +1,17 @@
 import { User } from '../Models/User';
 
-class UserService {
-  private static currentUser: User = {
-    id: '1',
-    firstName: 'John',
-    lastName: 'Doe'
-  };
 
-  static getCurrentUser(): User {
-    return this.currentUser;
-  }
-}
+const users: User[] = [
+  { id: '1', firstName: 'John', lastName: 'Doe', role: 'admin' },
+  { id: '2', firstName: 'Jane', lastName: 'Smith', role: 'developer' },
+  { id: '3', firstName: 'Mike', lastName: 'Johnson', role: 'devops' },
+];
 
-export default UserService;
+const getUsers = (): User[] => users;
+
+const getCurrentUser = (): User => {
+  // Załóżmy, że zalogowany jest pierwszy użytkownik na liście (admin)
+  return users[0];
+};
+
+export default { getUsers, getCurrentUser };
