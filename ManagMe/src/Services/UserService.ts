@@ -11,7 +11,7 @@ const getUsers = (): User[] => users;
 
 const getCurrentUser = (): User => {
   // Załóżmy, że zalogowany jest pierwszy użytkownik na liście (admin)
-  return users[0];
+  return users[1];
 };
 
 export default { getUsers, getCurrentUser };

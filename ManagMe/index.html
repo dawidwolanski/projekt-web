@@ -1,42 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Management App</title>
-    <script type="module" src="/src/main.ts"></script>
-  </head>
-  <body>
-    <div>
-      <h2>User Information</h2>
-      <div id="user-details"></div>
-    
-    
-      <div>
-        <h2>Add Project</h2>
-        <input type="text" id="project-name" placeholder="Project Name">
-        <input type="text" id="project-description" placeholder="Project Description">
-        <select id="project-priority">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <select id="project-stage">
-          <option value="todo">To Do</option>
-          <option value="inprogress">In Progress</option>
-          <option value="ended">Ended</option>
-        </select>
-        <button id="add-project">Add Project</button>
-      </div>
-      
-      <div>
-        <h2>Projects</h2>
-        <ul id="project-list"></ul>
-      </div>
-    <div>
-      <h2>Current Project</h2>
-      <div id="current-project">No project selected</div>
-    </div>
-    
-  </body>
+  <script type="module" src="/src/main.ts"></script>
+</head>
+<body>
+  <div>
+    <h2>User Information</h2>
+    <div id="user-details"></div>
+  </div>
+  
+  <div>
+    <h2>Add Project</h2>
+    <input type="text" id="project-name" placeholder="Project Name">
+    <input type="text" id="project-description" placeholder="Project Description">
+    <select id="project-priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+    <select id="project-stage">
+      <option value="todo">To Do</option>
+      <option value="inprogress">In Progress</option>
+      <option value="ended">Ended</option>
+    </select>
+    <button id="add-project">Add Project</button>
+  </div>
+  
+  <div>
+    <h2>Projects</h2>
+    <ul id="project-list"></ul>
+  </div>
+  
+  <div>
+    <h2>Current Project</h2>
+    <div id="current-project">No project selected</div>
+  </div>
+  
+  <div>
+    <h2>Current Project Tasks</h2>
+    <ol id="current-project-tasks"></ol>
+  </div>
+</body>
 </html>

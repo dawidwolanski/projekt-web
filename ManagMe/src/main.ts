@@ -3,12 +3,12 @@ import ProjectService from './Services/ProjectServices';
 import UserService from './Services/UserService';
 import { Project } from './Models/Project';
 import CurrentProjectService from './Services/CurrentProjectService';
-import { User } from './Models/User';
+import { Task } from './Models/Task';
+import TaskService from './Services/TaskService';
+import { formatDate, generateId } from './utils';
 
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
-
-const updateUserList = () => {
+const updateUserList = () => { // do czego to
   console.log('Updating user list');
   const userList = document.getElementById('user-list') as HTMLUListElement;
   userList.innerHTML = '';
@@ -19,7 +19,7 @@ const updateUserList = () => {
     listItem.className = 'user-item';
 
     const userText = document.createElement('span');
-    userText.textContent = `${user.firstName} ${user.lastName} - Role: ${user.role}`; // Zaktualizowane
+    userText.textContent = `${user.firstName} ${user.lastName} - Role: ${user.role}`; 
     listItem.appendChild(userText);
 
     userList.appendChild(listItem);
@@ -40,7 +40,7 @@ const updateProjectList = () => {
     projectText.textContent = `${project.name}: ${project.description} - Priority: ${project.priority}, Stage: ${project.stage}`;
     projectText.addEventListener('click', () => {
       CurrentProjectService.setCurrentProject(project);
-      console.log('Selected project:', project); // Dodaj log, aby sprawdzić, czy projekt jest wybierany
+      console.log('Selected project:', project);
       updateCurrentProject();
     });
 
@@ -52,8 +52,19 @@ const updateProjectList = () => {
       updateCurrentProject();
     });
 
+    const editButton = document.createElement('button');
+    const aLink = document.createElement('a');
+    aLink.setAttribute('href', `editproject.html`);
+    aLink.textContent = 'Edit';
+    editButton.appendChild(aLink);
+
+    editButton.addEventListener('click', () => {
+      CurrentProjectService.setCurrentProject(project);
+    });
+
     listItem.appendChild(projectText);
     listItem.appendChild(deleteButton);
+    listItem.appendChild(editButton);
     projectList.appendChild(listItem);
   });
 };
@@ -65,18 +76,52 @@ const updateCurrentProject = () => {
   currentProjectDiv.textContent = currentProject ? `Current Project: ${currentProject.name}` : 'No project selected';
 };
 
+const updateCurrentProjectTasks = () => {
+  const currentProject = CurrentProjectService.getCurrentProject();
+
+  if (!currentProject) return
+
+  const currentProjectTasks = TaskService.getAllProjectTasks(currentProject);
+  const currentProjectTasksList = document.getElementById('current-project-tasks')!!;
+
+  currentProjectTasks.forEach(task => {
+    const taskElement = document.createElement('div');
+    taskElement.className = 'task';
+
+    taskElement.innerHTML = `
+    <li>
+      <ul>
+        <li><h3>${task.name}</h3></li>
+        <li><p><strong>Description:</strong> ${task.description}</p></li>
+        <li><p><strong>Priority:</strong> ${task.priority}</p></li>
+        <li><p><strong>Story:</strong> ${task.story}</p></li>
+        <li><p><strong>Estimated Time:</strong> ${task.estimatedTime} hours</p></li>
+        <li><p><strong>Stage:</strong> ${task.stage}</p></li>
+        <li><p><strong>Created Date:</strong> ${formatDate(task.createdDate)}</p></li>
+        ${task.startDate ? `<li><p><strong>Start Date:</strong> ${formatDate(task.startDate)}</p></li>` : ''}
+        ${task.endDate ? `<li><p><strong>End Date:</strong> ${formatDate(task.endDate)}</p></li>` : ''}
+        ${task.assignedUser ? `<li><p><strong>Assigned User:</strong> ${task.assignedUser.firstName}</p></li>` : ''}
+      </ul>
+  </li>
+`;
+
+    currentProjectTasksList.appendChild(taskElement);
+  });
+}
+
 const addProject = () => {
   const nameInput = document.getElementById('project-name') as HTMLInputElement;
   const descriptionInput = document.getElementById('project-description') as HTMLInputElement;
-  const prioritySelect = document.getElementById('project-priority') as HTMLSelectElement; // Dodane
-  const stageSelect = document.getElementById('project-stage') as HTMLSelectElement; // Dodane
+  const prioritySelect = document.getElementById('project-priority') as HTMLSelectElement;
+  const stageSelect = document.getElementById('project-stage') as HTMLSelectElement;
 
   const newProject: Project = {
     id: generateId(),
     name: nameInput.value,
     description: descriptionInput.value,
-    priority: prioritySelect.value as 'low' | 'medium' | 'high', // Dodane
-    stage: stageSelect.value as 'todo' | 'inprogress' | 'ended', // Dodane
+    priority: prioritySelect.value as 'low' | 'medium' | 'high',
+    stage: stageSelect.value as 'todo' | 'inprogress' | 'ended',
+    tasks: []
   };
 
   ProjectService.addProject(newProject);
@@ -99,5 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateProjectList();
   updateCurrentProject();
   updateUserDetails();
-  updateUserList(); // Dodane
+  updateCurrentProjectTasks();
+  //updateUserList();
 });
