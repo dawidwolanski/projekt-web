@@ -25,7 +25,11 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+<<<<<<< HEAD
   justify-content: flex-start;
+=======
+  justify-content: center;
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
   align-items: flex-start;
   flex-direction: column;
   min-width: 320px;
@@ -89,6 +93,7 @@ button:focus-visible {
   flex-direction: column;
 }
 
+<<<<<<< HEAD
 .hide {
   display: none;
 }
@@ -107,6 +112,8 @@ button:focus-visible {
 }
 
 
+=======
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

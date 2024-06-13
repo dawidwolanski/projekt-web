@@ -1,4 +1,5 @@
 import './style.css';
+<<<<<<< HEAD
 import UserService from './Services/UserService';
 import CurrentProjectService from './Services/CurrentProjectService';
 import { Task } from './Models/Task';
@@ -12,10 +13,23 @@ const updateUserDetails = () => {
 
     if (!user) return
 
+=======
+import ProjectService from './Services/ProjectServices';
+import UserService from './Services/UserService';
+import { Project } from './Models/Project';
+import CurrentProjectService from './Services/CurrentProjectService';
+import { Task } from './Models/Task';
+import TaskService from './Services/TaskService';
+import { generateId } from './utils';
+
+const updateUserDetails = () => {
+    const user = UserService.getCurrentUser();
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
     const userDiv = document.getElementById('user-details') as HTMLDivElement;
     userDiv.textContent = `Logged in as: ${user.firstName} ${user.lastName}`;
 };
 
+<<<<<<< HEAD
 const updateCurrentProject = async () => {
   if (!projectIdFromUrl) {
     window.location.href = '/';
@@ -23,6 +37,10 @@ const updateCurrentProject = async () => {
   }
 
   CurrentProjectService.setCurrentProject(projectIdFromUrl)
+=======
+const updateCurrentProject = () => {
+  console.log('Updating current project');
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
   const currentProject = CurrentProjectService.getCurrentProject();
   const currentProjectDiv = document.getElementById('current-project') as HTMLDivElement;
   currentProjectDiv.textContent = currentProject ? `Current Project: ${currentProject.name}` : 'No project selected';
@@ -56,6 +74,12 @@ const dynamicUpdateForm = () => {
 function createTaskFromForm(form: HTMLFormElement): Task {
   const formData = new FormData(form);
 
+<<<<<<< HEAD
+=======
+
+  const id = generateId();
+  const projectId = CurrentProjectService.getCurrentProject()?.id ?? ''; // do poprawy bo nie powinno sie dac wejsc do edycji bez current projekta
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
   const name = formData.get('name') as string;
   const description = formData.get('description') as string;
   const priority = formData.get('priority') as 'low' | 'medium' | 'high';
@@ -65,10 +89,19 @@ function createTaskFromForm(form: HTMLFormElement): Task {
   const createdDate = new Date(formData.get('createdDate') as string).toDateString();
   const startDate = stage === 'doing' ? new Date(formData.get('startDate')?.toString() as string).toDateString() : undefined;
   const endDate = stage === 'done' ? new Date(formData.get('endDate')?.toString() as string).toDateString() : undefined;
+<<<<<<< HEAD
   const assignedUser = UserService.getCurrentUser() ?? undefined
 
   const task: Task = {
       name,
+=======
+  const assignedUser = UserService.getCurrentUser()
+
+  const task: Task = {
+      id,
+      name,
+      projectId,
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
       description,
       priority,
       story,
@@ -87,13 +120,17 @@ function createTaskFromForm(form: HTMLFormElement): Task {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+<<<<<<< HEAD
   new HeaderComponent().render(document.body)
+=======
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
     updateCurrentProject();
     updateUserDetails();
     dynamicUpdateForm();
 
     document.getElementById('taskForm')?.addEventListener('submit', (event) => {
       event.preventDefault();
+<<<<<<< HEAD
 
       if (!projectIdFromUrl) return
 
@@ -102,5 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Task created:', task);
       TaskService.createTask(projectIdFromUrl, task);
       window.location.href = '/';
+=======
+      const form = event.target as HTMLFormElement;
+      const task = createTaskFromForm(form);
+      console.log('Task created:', task);
+      TaskService.createTask(task);
+>>>>>>> 4b4a0d7e4ca9d0270f642e142754b5c20a834233
   });
 });
