@@ -25,7 +25,9 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -81,6 +83,29 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.taskForm div {
+  display: flex;
+  flex-direction: column;
+}
+
+.hide {
+  display: none;
+}
+
+#login-error {
+  color: red;
+}
+
+
+.login-form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
