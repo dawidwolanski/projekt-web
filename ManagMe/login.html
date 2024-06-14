@@ -4,25 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Sign-In API -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="482188742413-qm0qj0n3c0afb6mtuhmv7h6jipu83ndh.apps.googleusercontent.com">
-    <!-- Custom CSS -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
     <script type="module" src="/src/login.ts"></script>
+    <script>
+      function handleCredentialsResponse(resposne) {
+        console.log(resposne.credentials);
+      }
+
+      window.onload = function() {
+        google.accounts.id.initialize({
+          client_id: '203920141785-5lbb2jcehmq0khjldevjmct3748rjkke.apps.googleusercontent.com',
+          callback: handleCredentialsResponse
+        });
+
+        google.accounts.id.renderButton(
+          document.getElementById('login-google'),
+          { theme: 'outline', size: 'large'}
+        );
+
+        google.accounts.id.prompt();
+      }
+    </script>
 </head>
 <body>
-
-    <!-- <header class="w-100 py-3">
-        <div class="container d-flex justify-content-between align-items-center">
-            <h1 class="m-0"><a href="/">ManagMe</a></h1>
-            <nav>
-                <a href="/" class="btn btn-primary">Home</a>
-                <button class="btn btn-dark" id="toggle-theme-btn">Toggle Theme</button>
-            </nav>
-        </div>
-    </header> -->
 
     <div id="login-form-container" class="login-form-container">
         <form class="login-form d-flex align-items-center flex-column" id="login-form">
@@ -38,9 +43,8 @@
           <button type="submit" class="btn btn-primary btn-block" id="form-submit">Login</button>
           <div id="login-error" class="hide">blad logowania</div>
         </form>
-        <div class="g-signin2 mt-3 d-flex justify-content-center" data-onsuccess="onSignIn"></div>
+        <div id="login-google" class="mt-3 d-flex justify-content-center"></div>
     </div>
-    <!-- Bootstrap 5 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

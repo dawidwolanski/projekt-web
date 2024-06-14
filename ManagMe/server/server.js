@@ -6,14 +6,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore"; 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCCsNPVu4Zc9Eh5y4fjA-dq-YReYtRiJUA",
-  authDomain: "managme-2f8a4.firebaseapp.com",
-  projectId: "managme-2f8a4",
-  storageBucket: "managme-2f8a4.appspot.com",
-  messagingSenderId: "236012288722",
-  appId: "1:236012288722:web:b1d582f5f4730d1f8d0b0b",
-  measurementId: "G-NKNC0ZQHHX"
+const firebaseConfig = { apiKey:
+  "AIzaSyAVCZCJvHea4UzHaUZE5qE5JH122UloP6I",
+  authDomain: "managme-4d420.firebaseapp.com",
+   projectId: "managme-4d420", storageBucket: 
+   "managme-4d420.appspot.com", messagingSenderId: 
+   "203920141785", appId:
+    "1:203920141785:web:fdd9ff33803cfa72a57dc8", 
+    measurementId: "G-2CM663JMSP"
 };
 
 
@@ -56,7 +56,7 @@ app.post('/auth/google', async (req, res) => {
           id: payload.sub,
           firstName: payload.given_name || '',
           lastName: payload.family_name || '',
-          role: 'developer', // Default role
+          role: 'developer',
           email: payload.email || '',
         };
         users.push(user);

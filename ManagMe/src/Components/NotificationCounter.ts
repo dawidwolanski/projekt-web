@@ -15,15 +15,15 @@ export class NotificationCounterComponent {
 
     const bellIcon = document.createElement('span');
     bellIcon.innerText = '🔔';
-    bellIcon.style.fontSize = '24px'; // Adjust font size as needed
-    bellIcon.style.marginRight = '-8px'; // Adjust margin as needed
+    bellIcon.style.fontSize = '24px';
+    bellIcon.style.marginRight = '-8px';
 
     const countSpan = document.createElement('span');
     countSpan.style.backgroundColor = 'red';
     countSpan.style.color = 'white';
     countSpan.style.borderRadius = '50%';
     countSpan.style.padding = '4px 8px';
-    countSpan.style.fontSize = '14px'; // Adjust font size as needed
+    countSpan.style.fontSize = '14px';
     countSpan.style.fontWeight = 'bold';
 
     this.unreadCount$.subscribe(count => {

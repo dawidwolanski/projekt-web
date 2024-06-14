@@ -72,7 +72,6 @@ export class NotificationListComponent {
 
     document.body.appendChild(modalElement);
 
-    // Czyszczenie zawartości modala przed dodaniem nowych powiadomień
     modalBody.innerHTML = '';
 
     this.notifications
@@ -92,7 +91,6 @@ export class NotificationListComponent {
       )
       .subscribe({
         next: () => {
-          // Inicjalizacja i pokazanie modala za pomocą Bootstrap Modal
           const bootstrapModal = new Modal(modalElement);
           bootstrapModal.show();
         },

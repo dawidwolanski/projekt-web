@@ -23,6 +23,7 @@ class ProjectService {
       projects[id] = d;
     });
     
+    ProjectService.projects = projects;
     return projects
   }
   
@@ -32,8 +33,7 @@ class ProjectService {
   }
 
   static async updateProject(id: string, updatedProject: Project): Promise<void> {
-    ProjectService.projects[id] = updatedProject
-
+    ProjectService.projects[id] = updatedProject;
     const ref = doc(db, 'projects/', id);
     await setDoc(ref, updatedProject);
   }
@@ -47,12 +47,11 @@ class ProjectService {
 
   static async addTask(projectId: string, task: Task) {
     const project = ProjectService.projects[projectId];
-
     if (!project) return
 
     project.tasks.push(task);
 
-    this.updateProject(projectId, project)
+    await this.updateProject(projectId, project)
   }
 }
 

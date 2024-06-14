@@ -18,8 +18,6 @@ interface ThemeToggleButton {
 
       const currentTheme = localStorage.getItem('theme') || 'dark';
         document.body.setAttribute('data-bs-theme', currentTheme);
-
-        //NotificationService.send({title: 'test', message: 'loremisaidfsidfjsdfj', date: new Date().toDateString(), priority: 'medium', read: false})
     }
   
     render(parent: HTMLElement): void {
@@ -61,7 +59,6 @@ interface ThemeToggleButton {
       header.appendChild(this.container);
       parent.prepend(header);
   
-      // Add event listener for the theme toggle button
       const themeToggleButton: ThemeToggleButton = {
         buttonElement: toggleThemeButton,
         toggleTheme: this.toggleTheme,
@@ -71,9 +68,7 @@ interface ThemeToggleButton {
   
     private toggleTheme(): void {
         const newTheme = document.body.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light';
-        // Ustaw nowy temat na elemencie body
         document.body.setAttribute('data-bs-theme', newTheme);
-        // Zapisz nowy temat do localStorage
         localStorage.setItem('theme', newTheme);
     }
 
