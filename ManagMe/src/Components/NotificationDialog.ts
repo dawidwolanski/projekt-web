@@ -62,7 +62,6 @@ export class NotificationDialogComponent {
       dialog.appendChild(dialogContent);
       parent.appendChild(dialog);
   
-      // Show the modal
       const bootstrapModal = new Modal(dialog);
       bootstrapModal.show();
     }

@@ -27,7 +27,6 @@ class NotificationService {
     send(notification: Notification): void {
       this.notifications.push(notification);
       this.notificationsSubject.next(this.notifications);
-      // Show dialog for medium and high priority notifications
       if (notification.priority === 'medium' || notification.priority === 'high') {
         this.showDialog(notification);
       }
