@@ -1,44 +1,31 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore"; 
+import cors from "cors";
+import authRoutes from './routes/authRoutes.js';
+import projectRouter from './routes/projectRoutes.js';
+import notificationsRouter from './routes/notificationRoutes.js';
+import dotenv from 'dotenv';
+import tasksRouter from './routes/tasksRoutes.js';
+import { verifyToken } from './controllers/authController.js'
 
-const firebaseConfig = { apiKey:
-  "AIzaSyAVCZCJvHea4UzHaUZE5qE5JH122UloP6I",
-  authDomain: "managme-4d420.firebaseapp.com",
-   projectId: "managme-4d420", storageBucket: 
-   "managme-4d420.appspot.com", messagingSenderId: 
-   "203920141785", appId:
-    "1:203920141785:web:fdd9ff33803cfa72a57dc8", 
-    measurementId: "G-2CM663JMSP"
-};
-
-
-const firebase = initializeApp(firebaseConfig);
-const db = getFirestore(firebase);
+dotenv.config();
 
 const app = express();
-const port = 3000;
 
-const tokenSecret = 'your-secret-key';
-let refreshTokens = [];
-
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(bodyParser.json());
+
+// Ustaw trasy API
+app.use('/notifications', notificationsRouter);
+app.use('/projects', projectRouter);
+app.use('/tasks', tasksRouter);
+app.use('/auth', authRoutes);
 
 
-const getUserData = async (login, password) => {
-      const querySnapshot = await getDocs(collection(db, `users/`));
-
-      console.log(querySnapshot.docs.find(() => 1));
-      return querySnapshot.docs.find(doc => {
-        const d = doc.data();
-        return d.login == login && d.password == password
-      })?.data();
-}
+app.get('/protected', verifyToken, (req, res) => {
+  res.status(200).send(req.user);
+});
 
 app.post('/auth/google', async (req, res) => {
   const { token } = req.body;
@@ -72,68 +59,9 @@ app.post('/auth/google', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
-  const { login, password } = req.body;
-  const user = await getUserData(login, password);
 
-  if (user) {
-    const token = generateToken(user, 60 * 60);
-    const refreshToken = generateToken(user, 24 * 60 * 60);
-    refreshTokens.push(refreshToken);
-    res.status(200).send({isOk: true, token, refreshToken });
-  } else {
-    res.status(200).send({isOk: false});
-  }
-});
-
-app.post('/refreshToken', (req, res) => {
-  const { refreshToken } = req.body;
-  if (!refreshTokens.includes(refreshToken)) {
-    return res.status(403).send('Forbidden');
-  }
-
-  jwt.verify(refreshToken, tokenSecret, (err, user) => {
-    if (err) {
-      return res.status(403).send('Forbidden');
-    }
-    const newToken = generateToken(user, 60 * 60);
-    res.status(200).send({ token: newToken });
-  });
-});
-
-app.get('/protected', verifyToken, (req, res) => {
-  res.status(200).send(req.user);
-});
-
+// Start serwera
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Serwer działa na porcie ${port}`);
 });
-
-function generateToken(user, expirationInSeconds) {
-  const exp = Math.floor(Date.now() / 1000) + expirationInSeconds;
-  const token = jwt.sign(
-    {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      exp
-    },
-    tokenSecret,
-    { algorithm: 'HS256' }
-  );
-  return token;
-}
-
-function verifyToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.sendStatus(403);
-
-  jwt.verify(token, tokenSecret, (err, user) => {
-    if (err) return res.status(401).send('Unauthorized');
-    req.user = user;
-    next();
-  });
-}

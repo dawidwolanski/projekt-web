@@ -1,6 +1,7 @@
 import { Notification } from "../Models/Notification";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'bootstrap';
+import NotificationService from "../Services/NotificationService";
 
 export class NotificationDialogComponent {
     private notification: Notification;
@@ -64,5 +65,8 @@ export class NotificationDialogComponent {
   
       const bootstrapModal = new Modal(dialog);
       bootstrapModal.show();
+
+      this.notification.isread = 1
+      NotificationService.setNotificationRead(this.notification.id)
     }
   }

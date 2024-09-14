@@ -4,12 +4,18 @@ import ProjectService from './ProjectServices';
 class CurrentProjectService {
     private static currentProjectKey = 'currentProject';
 
-    static setCurrentProject(project: Project): void;
-    static setCurrentProject(id: string): void;
+    static setCurrentProject(project: Project): Promise<void>;
+    static setCurrentProject(id: number): Promise<void>;
   
-    static async setCurrentProject(arg: string | Project): Promise<void> {
+    static async setCurrentProject(arg: number | Project): Promise<void> {
       const projects = await ProjectService.getProjects();
-      const project = typeof(arg) == 'string' ? projects[arg] : arg;
+      const found = projects.find(project => project.id == arg);
+
+      if (!found) {
+        console.error('Project not found')
+      }
+
+      const project = typeof(arg) == 'number' ? found : arg;
       localStorage.setItem(this.currentProjectKey, JSON.stringify(project));
     }
 

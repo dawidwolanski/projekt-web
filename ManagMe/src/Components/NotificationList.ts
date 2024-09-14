@@ -78,7 +78,8 @@ export class NotificationListComponent {
       .pipe(
         map(notifications => {
           notifications.forEach(notification => {
-            notification.read = true;
+            notification.isread = 1
+            NotificationService.setNotificationRead(notification.id)
             const div = document.createElement('div');
             div.innerHTML = `
               <h3>${notification.title}</h3>

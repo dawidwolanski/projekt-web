@@ -2,12 +2,14 @@ import UserService from './Services/UserService';
 import HeaderComponent from './Components/Header';
 import './style.css';
 
+const HOST_NAME = import.meta.env.VITE_HOST_NAME;
+
 const handleFormSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     const login = (document.getElementById('form-username') as HTMLInputElement).value;
     const password = (document.getElementById('form-password') as HTMLInputElement).value;
     
-    const response = await fetch('http://localhost:3000/login', {
+    const response = await fetch(`${HOST_NAME}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -19,7 +21,7 @@ const handleFormSubmit = async (e: SubmitEvent) => {
 
     if (!response.ok) {
         console.error('Error:', data.message);
-        return
+        return;
     }
 
     if (data.isOk) {
@@ -34,26 +36,24 @@ const handleFormSubmit = async (e: SubmitEvent) => {
     errorDiv.textContent = 'Invalid login or password';
 }
 
-
 document.getElementById('login-form')?.addEventListener('submit', handleFormSubmit);
 
 function onSignIn(googleUser: { getAuthResponse: () => { (): any; new(): any; id_token: any; }; }) {
     console.log('loguje');
-      var id_token = googleUser.getAuthResponse().id_token;
-      fetch('http://localhost:3000/auth/google', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ token: id_token })
-      })
-      .then(response => response.json())
-      .then(data => {
-          console.log('Logged in successfully:', data);
-          // Store token in localStorage or do something with it
-      })
-      .catch(error => console.error('Error:', error));
-  }
+    var id_token = googleUser.getAuthResponse().id_token;
+    fetch(`${HOST_NAME}/auth/google`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token: id_token })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Logged in successfully:', data);
+        // Store token in localStorage or do something with it
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-
-  new HeaderComponent().render(document.body)
+new HeaderComponent().render(document.body);

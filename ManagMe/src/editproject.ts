@@ -5,8 +5,6 @@ import { Task } from './Models/Task';
 import TaskService from './Services/TaskService';
 import HeaderComponent from './Components/Header';
 
-const projectIdFromUrl = (new URL(window.location.href)).searchParams.get('id')
-
 const updateUserDetails = () => {
     const user = UserService.getCurrentUser();
 
@@ -17,12 +15,6 @@ const updateUserDetails = () => {
 };
 
 const updateCurrentProject = async () => {
-  if (!projectIdFromUrl) {
-    window.location.href = '/';
-    return
-  }
-
-  CurrentProjectService.setCurrentProject(projectIdFromUrl)
   const currentProject = CurrentProjectService.getCurrentProject();
   const currentProjectDiv = document.getElementById('current-project') as HTMLDivElement;
   currentProjectDiv.textContent = currentProject ? `Current Project: ${currentProject.name}` : 'No project selected';
@@ -31,7 +23,7 @@ const updateCurrentProject = async () => {
 const updateUsersList = async () => {
   const usersSelect = document.getElementById('assignedUser')!!;
   
-  const usernames = await UserService.getUsersList();
+  const usernames = await TaskService.getUsersToAssign()
 
   usersSelect.innerHTML = '';
 
@@ -72,6 +64,7 @@ const dynamicUpdateForm = () => {
 function createTaskFromForm(form: HTMLFormElement): Task {
   const formData = new FormData(form);
 
+  const project_id = CurrentProjectService.getCurrentProject()?.id as number;
   const name = formData.get('name') as string;
   const description = formData.get('description') as string;
   const priority = formData.get('priority') as 'low' | 'medium' | 'high';
@@ -83,7 +76,9 @@ function createTaskFromForm(form: HTMLFormElement): Task {
   const endDate = stage === 'done' ? new Date(formData.get('endDate')?.toString() as string).toDateString() : undefined;
   const assignedUser = formData.get('doneUser') as string;
 
-  let task: Task = {
+  let task: Task = {  
+      id: 0,
+      project_id,
       name,
       description,
       priority,
@@ -111,14 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('taskForm')?.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      if (!projectIdFromUrl) return
-
       const form = event.target as HTMLFormElement;
       const task = createTaskFromForm(form);
-      console.log('Task created:', task);
-      await TaskService.createTask(projectIdFromUrl, task);
+      await TaskService.addTask(task);
 
-      window.location.href = '/';
-      window.location.reload();
+      window.location.href = './';
   });
 });

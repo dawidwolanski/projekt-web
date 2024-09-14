@@ -1,57 +1,105 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+
 import { Project } from '../Models/Project';
-import db from '../db';
 import { Task } from '../Models/Task';
 
-type Projects = {[key: string]: Project}
+const HOST_NAME = import.meta.env.VITE_HOST_NAME;
 
 class ProjectService {
-  private static projects: Projects = {};
-  
+  static async getProjects(): Promise<Project[]> {
+    try {
+      const response = await fetch(`${HOST_NAME}/projects`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      const projects = await response.json() as Project[];
 
-  static async getProjects(): Promise<Projects> {
-    const projectsCount = Object.keys(ProjectService.projects).length
-    if (projectsCount) return ProjectService.projects
-  
-    const querySnapshot = await getDocs(collection(db, "projects/"));
+      const projectTasksPromises = projects.map(async (project) => {
+        const tasksResponse = await fetch(`${HOST_NAME}/projects/${project.id}/tasks`);
+        if (!tasksResponse.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        const tasks = await tasksResponse.json() as Task[];
+        return {
+          ...project,
+          tasks,
+        };
+      });
 
-    const projects: Projects = {}
-
-    querySnapshot.forEach(doc => {
-      const id = doc.id;
-      const d = doc.data() as Project;
-      projects[id] = d;
-    });
-    
-    ProjectService.projects = projects;
-    return projects
-  }
-  
-  static async addProject(project: Project): Promise<void> {
-    const docRef = await addDoc(collection(db, 'projects/'), project);
-    ProjectService.projects[docRef.id] = project;
-  }
-
-  static async updateProject(id: string, updatedProject: Project): Promise<void> {
-    ProjectService.projects[id] = updatedProject;
-    const ref = doc(db, 'projects/', id);
-    await setDoc(ref, updatedProject);
+      return await Promise.all(projectTasksPromises);
+    } catch (error) {
+      console.error('Error fetching projects and tasks:', error);
+      throw new Error('Unable to fetch projects and tasks.');
+    }
   }
 
-  static async deleteProject(id: string): Promise<void> {
-    delete ProjectService.projects[id]
+  static async getProject(id: number): Promise<Project> {
+    try {
+      const response = await fetch(`${HOST_NAME}/project/${id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      const project = await response.json() as Project;
+      const tasksResponse = await fetch(`${HOST_NAME}/projects/${project.id}/tasks`);
+      const tasks = await tasksResponse.json() as Task[];
 
-    const ref = doc(db, 'projects/', id);
-    await deleteDoc(ref);
+      return {
+          ...project,
+          tasks,
+        };
+    } catch (error) {
+      console.error('Error fetching projects and tasks:', error);
+      throw new Error('Unable to fetch projects and tasks.');
+    }
   }
 
-  static async addTask(projectId: string, task: Task) {
-    const project = ProjectService.projects[projectId];
-    if (!project) return
+  static async addProject(project: Omit<Project, 'id' | 'tasks'>): Promise<void> {
+    try {
+      const response = await fetch(`${HOST_NAME}/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(project),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add project.');
+      }
+    } catch (error) {
+      console.error('Error adding project:', error);
+      throw new Error('Unable to add project.');
+    }
+  }
 
-    project.tasks.push(task);
+  static async updateProject(id: number, updatedProject: Project): Promise<void> {
+    try {
+      const response = await fetch(`${HOST_NAME}/projects/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProject),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update project.');
+      }
+    } catch (error) {
+      console.error('Error updating project:', error);
+      throw new Error('Unable to update project.');
+    }
+  }
 
-    await this.updateProject(projectId, project)
+  static async deleteProject(id: number): Promise<void> {
+    try {
+      const response = await fetch(`${HOST_NAME}/projects/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete project.');
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      throw new Error('Unable to delete project.');
+    }
   }
 }
 

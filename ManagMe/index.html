@@ -45,7 +45,55 @@
 
     <div class="container mt-5">
         <h2>Current Project Tasks</h2>
-        <ol id="current-project-tasks"></ol>
+        <!-- <ol id="current-project-tasks"></ol> -->
+        <div class="container">
+            <div class="row">
+                <div class="col" id="todo-tasks">
+                    <h3>To Do</h3>
+                    <div id="todo-column" class="card-columns kanban-column"></div>
+                </div>
+                <div class="col" id="doing-tasks">
+                    <h3>Doing</h3>
+                    <div id="doing-column" class="card-columns kanban-column"></div>
+                </div>
+                <div class="col" id="done-tasks">
+                    <h3>Done</h3>
+                    <div id="done-column" class="card-columns kanban-column"></div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="taskModalLabel">Modify Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <form id="taskForm">
+                    <div class="mb-3">
+                    <label for="assignedUser" class="form-label">Assign User</label>
+                    <select class="form-select" id="assignedUser" required>
+                        <!-- Lista użytkowników będzie dodawana dynamicznie -->
+                    </select>
+                    </div>
+                    <div id="doneFields" style="display:none;">
+                    <div class="mb-3">
+                        <label for="endTime" class="form-label">End Date</label>
+                        <input type="datetime-local" class="form-control" id="endTime">
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveTask">Save Changes</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

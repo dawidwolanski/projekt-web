@@ -1,6 +1,6 @@
-import { User } from "./User";
-
 export interface Task {
+    id: number;
+    project_id: number;
     name: string;
     description: string;
     priority: 'low' | 'medium' | 'high';
@@ -10,5 +10,5 @@ export interface Task {
     createdDate: string;
     startDate?: string; // Optional, required if state is doing
     endDate?: string; // Optional, required if state is done
-    assignedUser: string
+    assignedUser?: string
 }

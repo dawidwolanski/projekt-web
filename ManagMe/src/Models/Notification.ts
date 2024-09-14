@@ -1,9 +1,10 @@
 type ISOString = string;
 
 export interface Notification {
+  id: number
   title: string;
   message: string;
   date: ISOString;
   priority: 'low' | 'medium' | 'high';
-  read: boolean;
+  isread: 0 | 1;
 }
