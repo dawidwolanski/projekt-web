@@ -16,18 +16,18 @@ class NotificationService {
 
     private async init() {
       try {
-        // Fetch powiadomień z endpointu
+        
         const response = await fetch(`${HOST_NAME}/notifications`);
         
-        // Sprawdzenie, czy odpowiedź jest ok
+        
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         
-        // Pobranie danych z odpowiedzi
+       
         const notifications: Notification[] = await response.json();
         
-        // Dodanie powiadomień do this.notifications
+        
         notifications.forEach(notification => this.send(notification));
         
         console.log('Notifications have been loaded:', this.notifications);
@@ -36,7 +36,7 @@ class NotificationService {
       }
     }
 
-    // tworzyc powiadomienie przy czyms
+    
   
     send(notification: Notification): void {
       this.notifications.push(notification);
@@ -75,7 +75,7 @@ class NotificationService {
           throw new Error('Failed to add notification.');
         }
     
-        // Odczyt danych odpowiedzi (zwrócone powiadomienie z ID z bazy)
+        
         const res = await response.json();
         const id = res.insertedId;
     

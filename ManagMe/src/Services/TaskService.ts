@@ -48,7 +48,7 @@ class TaskService {
     }
   }
 
-  // Dodawanie nowego zadania
+  
   static async addTask(task: Task): Promise<void> {
     try {
       const response = await fetch(`${HOST_NAME}/tasks`, {
@@ -67,7 +67,7 @@ class TaskService {
     }
   }
 
-  // Aktualizowanie zadania
+  
   static async updateTask(id: number, updatedTask: Task): Promise<void> {
     try {
       const response = await fetch(`${HOST_NAME}/tasks/${id}`, {
@@ -86,7 +86,7 @@ class TaskService {
     }
   }
 
-  // Usuwanie zadania
+  
   static async deleteTask(id: number): Promise<void> {
     try {
       const response = await fetch(`${HOST_NAME}/tasks/${id}`, {

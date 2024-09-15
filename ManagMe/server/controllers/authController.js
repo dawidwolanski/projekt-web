@@ -34,8 +34,6 @@ function verifyToken(req, res, next) {
 }
 
 
-// there
-
 const jwtLogin = async (req, res) => {
   const { login, password } = req.body;
   const response = await query('SELECT * FROM users WHERE login = ? AND password = ?', [login, password]);

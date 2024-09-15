@@ -4,7 +4,7 @@ export interface Project {
   id: number;
   name: string;
   description: string;
-  priority: 'low' | 'medium' | 'high'; // Dodane
-  stage: 'todo' | 'inprogress' | 'ended'; // Dodane
+  priority: 'low' | 'medium' | 'high';
+  stage: 'todo' | 'inprogress' | 'ended'; 
   tasks: Task[];
 }

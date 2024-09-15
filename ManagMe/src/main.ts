@@ -73,38 +73,7 @@ const updateCurrentProject = async () => {
   updateCurrentProjectTasks();
 };
 
-// const updateCurrentProjectTasks = () => {
-//   const currentProject = CurrentProjectService.getCurrentProject();
 
-//   if (!currentProject) return;
-
-//   const currentProjectTasks = currentProject.tasks;
-//   const currentProjectTasksContainer = document.getElementById('current-project-tasks')!!;
-
-//   currentProjectTasksContainer.innerHTML = '';
-
-//   currentProjectTasks.forEach(task => {
-//     const taskElement = document.createElement('div');
-//     taskElement.className = 'task card mb-3';
-
-//     taskElement.innerHTML = `
-//       <div class="card-body">
-//         <h3 class="card-title">${task.name}</h3>
-//         <p class="card-text"><strong>Description:</strong> ${task.description}</p>
-//         <p class="card-text"><strong>Priority:</strong> ${task.priority}</p>
-//         <p class="card-text"><strong>Story:</strong> ${task.story}</p>
-//         <p class="card-text"><strong>Estimated Time:</strong> ${task.estimatedTime} hours</p>
-//         <p class="card-text"><strong>Stage:</strong> ${task.stage}</p>
-//         <p class="card-text"><strong>Created Date:</strong> ${formatDate(task.createdDate)}</p>
-//         ${task.startDate ? `<p class="card-text"><strong>Start Date:</strong> ${formatDate(task.startDate)}</p>` : ''}
-//         ${task.endDate ? `<p class="card-text"><strong>End Date:</strong> ${formatDate(task.endDate)}</p>` : ''}
-//         ${task.assignedUser ? `<p class="card-text"><strong>Assigned User:</strong> ${task.assignedUser}</p>` : ''}
-//       </div>
-//     `;
-
-//     currentProjectTasksContainer.appendChild(taskElement);
-//   });
-// }
 
 const createNotificationFromTask = async (task: Task) => {
   const notification: Omit<Notification, 'id'> = {
@@ -192,7 +161,7 @@ const setupColumnDragAndDrop = (column: HTMLElement, newStage: 'todo' | 'doing' 
       task.stage = newStage;
 
       if (newStage === 'doing' || newStage === 'done') {
-        // Otwórz modal do przypisania użytkownika i (dla done) ustawienia daty zakończenia
+       
         await openTaskModal(task, newStage);
       } else {
         task.startDate = ''
@@ -204,7 +173,7 @@ const setupColumnDragAndDrop = (column: HTMLElement, newStage: 'todo' | 'doing' 
   });
 };
 
-// Funkcja otwierająca modal i pobierająca użytkowników
+
 const openTaskModal = async (task: Task, newStage: 'doing' | 'done') => {
   console.log('callin');
   
@@ -212,13 +181,13 @@ const openTaskModal = async (task: Task, newStage: 'doing' | 'done') => {
   const endTimeInput = document.getElementById('endTime') as HTMLInputElement;
   const doneFields = document.getElementById('doneFields')!;
 
-  // Wyczyść listę użytkowników
   
-  // Pobierz użytkowników z TaskService
+  
+  
   const usernames = await TaskService.getUsersToAssign();
   
   assignedUserSelect.innerHTML = '';
-  // Dodaj użytkowników do selecta
+
   usernames.forEach(user => {
     const option = document.createElement('option');
     option.value = `${user.firstName} ${user.lastName}`;
@@ -227,17 +196,17 @@ const openTaskModal = async (task: Task, newStage: 'doing' | 'done') => {
   });
 
 
-  // Ustaw przypisanego użytkownika
+
   assignedUserSelect.value = task.assignedUser || '';
 
-  // Pokaż pole z datą zakończenia tylko dla "done"
+  
   if (newStage === 'done') {
     doneFields.style.display = 'block';
   } else {
     doneFields.style.display = 'none';
   }
 
-  // Pokaż modal
+  
   const taskModalElement = document.getElementById('taskModal')!;
   const taskModal = new Modal(taskModalElement);
   taskModal.show();
@@ -252,26 +221,26 @@ const openTaskModal = async (task: Task, newStage: 'doing' | 'done') => {
       task.endDate = new Date(endTimeInput.value).toDateString()
     } 
 
-    // Zapisz zmiany
+    
     await modifyTask(task);
 
-    // Zamknij modal
+    
     taskModal.hide();
 
-    // Upewnij się, że backdrop znika
+    
     taskModalElement.addEventListener('hidden.bs.modal', () => {
       const backdrop = document.querySelector('.modal-backdrop');
       if (backdrop) {
-        backdrop.remove(); // Usuń element backdrop, jeśli nadal jest obecny
+        backdrop.remove(); 
       }
     });
   };
 
-  // Obsługa zamknięcia modalu ręcznie (np. przycisk "X" lub "Anuluj")
+  
   taskModalElement.addEventListener('hidden.bs.modal', () => {
     const backdrop = document.querySelector('.modal-backdrop');
     if (backdrop) {
-      backdrop.remove(); // Usuń element backdrop, jeśli nadal jest obecny
+      backdrop.remove();
     }
   });
 };

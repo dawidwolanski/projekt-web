@@ -9,7 +9,7 @@ const pool = mysql.createPool({
   password: process.env.MYSQL_PASSWORD || '',
   database: process.env.MYSQL_DATABASE || 'managme',
   connectionLimit : 10,
-  //waitForConnections: true,
+ 
 });
 
 export async function query(sql, params) {

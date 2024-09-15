@@ -1,6 +1,5 @@
 import query from '../db.js';
 
-// Pobierz wszystkie zadania
 const getTasks = async (req, res) => {
   try {
     const tasks = await query('SELECT * FROM tasks');
@@ -10,7 +9,7 @@ const getTasks = async (req, res) => {
   }
 };
 
-// Pobierz zadanie po ID
+
 const getTask = async (req, res) => {
   try {
     const rows = await query('SELECT * FROM tasks WHERE id = ?', [req.params.id]);
@@ -33,7 +32,7 @@ const getUsersToAssign = async (req, res) => {
   }
 }
 
-// Dodaj nowe zadanie
+
 const createTask = async (req, res) => {
   try {
     const { assignedUser = null, createdDate = null, description, estimatedTime = null, name, priority, stage, story, project_id, startDate = null, endDate = null } = req.body;
@@ -49,7 +48,6 @@ const createTask = async (req, res) => {
   }
 };
 
-// Zaktualizuj zadanie
 const updateTask = async (req, res) => {
   try {
     const { assignedUser, createdDate, description, estimatedTime, name, priority, stage, story, project_id, startDate, endDate } = req.body;
@@ -67,7 +65,7 @@ const updateTask = async (req, res) => {
   }
 };
 
-// Usuń zadanie
+
 const deleteTask = async (req, res) => {
   try {
     const result = await query('DELETE FROM tasks WHERE id = ?', [req.params.id]);

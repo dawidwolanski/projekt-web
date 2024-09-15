@@ -5,10 +5,10 @@ export interface Task {
     description: string;
     priority: 'low' | 'medium' | 'high';
     story: string;
-    estimatedTime: number; // in hours
+    estimatedTime: number; 
     stage: 'todo' | 'doing' | 'done';
     createdDate: string;
-    startDate?: string; // Optional, required if state is doing
-    endDate?: string; // Optional, required if state is done
+    startDate?: string; 
+    endDate?: string; 
     assignedUser?: string
 }

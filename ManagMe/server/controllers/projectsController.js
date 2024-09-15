@@ -1,6 +1,6 @@
 import query from '../db.js';
 
-// Pobierz wszystkie projekty
+
 const getProjects = async (req, res) => {
   try {
     const rows = await query('SELECT * FROM projects');
@@ -11,7 +11,7 @@ const getProjects = async (req, res) => {
   }
 };
 
-// Pobierz projekt po ID
+
 const getProject = async (req, res) => {
   try {
     const rows = await query('SELECT * FROM projects WHERE id = ?', [req.params.id]);
@@ -35,7 +35,7 @@ const getProjectTasks = async (req, res) => {
   }
 };
 
-// Dodaj nowy projekt
+
 const createProject = async (req, res) => {
   try {
     const { description, name, priority, stage } = req.body;
@@ -49,7 +49,7 @@ const createProject = async (req, res) => {
   }
 };
 
-// Zaktualizuj projekt
+
 const updateProject = async (req, res) => {
   try {
     const { description, name, priority, stage } = req.body;
@@ -67,7 +67,7 @@ const updateProject = async (req, res) => {
   }
 };
 
-// Usuń projekt
+
 const deleteProject = async (req, res) => {
   try {
     const result = await query('DELETE FROM projects WHERE id = ?', [req.params.id]);

@@ -11,12 +11,12 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// Ustaw trasy API
+
 app.use('/notifications', notificationsRouter);
 app.use('/projects', projectRouter);
 app.use('/tasks', tasksRouter);
@@ -60,7 +60,7 @@ app.post('/auth/google', async (req, res) => {
 });
 
 
-// Start serwera
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Serwer działa na porcie ${port}`);

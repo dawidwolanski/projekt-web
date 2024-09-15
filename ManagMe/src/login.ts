@@ -51,7 +51,7 @@ function onSignIn(googleUser: { getAuthResponse: () => { (): any; new(): any; id
     .then(response => response.json())
     .then(data => {
         console.log('Logged in successfully:', data);
-        // Store token in localStorage or do something with it
+       
     })
     .catch(error => console.error('Error:', error));
 }
